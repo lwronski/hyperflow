@@ -17,6 +17,7 @@ services:
       - REDIS_URL=redis://redis/
       - HF_VAR_function=redisCommand
     volumes:
+      - /Users/lwronski/projects/splunk-otel-network-explorer-chart:/kernel
       - ./wfdir:/home/wfdir
       - ./hyperflow/:/home/hyperflow/
       - ./hyperflow-job-executor/:/home/hyperflow-job-executor/
@@ -56,6 +57,24 @@ services:
    networks:
      - my-network
 
+  reducer:
+    image: quay.io/signalfx/splunk-network-explorer-reducer:latest-v0.9
+    entrypoint: /srv/opentelemetry-ebpf-reducer --disable-prometheus-metrics --enable-otlp-grpc-metrics --otlp-grpc-metrics-host=collector-gateway --log-whitelist-all
+    ports:
+      - "8000:8000"
+    networks:
+      - my-network
+  
+  ubuntu-1:
+    image: ubuntu
+    tty: true
+    privileged: true
+    pid: "host"
+    networks:
+      - my-network
+    volumes:
+      - /Users/lwronski/projects/splunk-otel-network-explorer-chart:/kernel
+
 networks:
     my-network:
-      driver: bridge
+      driver: host
