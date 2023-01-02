@@ -58,7 +58,7 @@ services:
      - my-network
 
   reducer:
-    image: quay.io/signalfx/splunk-network-explorer-reducer:latest-v0.9
+    image: quay.io/signalfx/splunk-network-explorer-reducer@sha256:9db4db0c4c420a344cb971f895851ebf4c75373d6857030a513ac4a2a7621aa7
     entrypoint: /srv/opentelemetry-ebpf-reducer --disable-prometheus-metrics --enable-otlp-grpc-metrics --otlp-grpc-metrics-host=collector-gateway --log-whitelist-all
     ports:
       - "8000:8000"
